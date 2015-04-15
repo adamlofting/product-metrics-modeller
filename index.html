@@ -1,0 +1,393 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+
+        <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'> -->
+        <!--
+        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' rel='stylesheet' type='text/css'> -->
+        <link href='bower_components/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+        <link href='bower_components/metrics-graphics/dist/metricsgraphics.css' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <h1 class="navbar-brand" href="#">Product Metrics Modelling</h1>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="alert alert-success" role="alert">
+                        <i class="glyphicon glyphicon-arrow-down pull-right"></i> <strong>1.</strong> Play with these sliders
+                    </div>
+                    <span id="outputVisitors" class="pull-right"></span>
+                    <label> Organic Visitors Per Day <i class="glyphicon glyphicon-info-sign" title="A generally interested audience from any marketing"></i></label>
+                    <input type="range" min="1" max="250000" step="50" value="10000" id="rangeVisitors">
+                    <hr/>
+
+                    <label>Conversion Rate <i class="glyphicon glyphicon-info-sign" title="From a visitor to a new user"></i></label>
+                    <span id="outputConversionRate" class="pull-right"></span>
+                    <input type="range" min="0.5" max="40" step="0.5" value="7" id="rangeConversion">
+                    <hr/>
+
+                    <label>Retention 7 Day <i class="glyphicon glyphicon-info-sign" title="The % of new users who still login after 7 days"></i></label>
+                    <span id="outputRetention7Days" class="pull-right"></span>
+                    <input type="range" min="1" max="75" step="0.5" value="5" id="rangeRetention7Days">
+                    <hr/>
+
+                    <label>Retention 30 Day</label>
+                    <span id="outputRetention30Days" class="pull-right"></span>
+                    <input type="range" min="0.1" max="75" step="0.1" value="2" id="rangeRetention30Days">
+                    <hr/>
+
+                    <label>Retention 90 Day</label>
+                    <span id="outputRetention90Days" class="pull-right"></span>
+                    <input type="range" min="0.1" max="75" step="0.1" value="1" id="rangeRetention90Days">
+                    <hr/>
+
+                    <label>Referred Visits Per 100 New Users</label>
+                    <span id="outputReferrals" class="pull-right"></span>
+                    <input type="range" min="0" max="25" step="1" value="0" id="rangeReferrals">
+
+                </div>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="alert alert-success" role="alert">
+                        <i class="glyphicon glyphicon-arrow-down pull-right"></i> <strong>2.</strong> See what happens to product growth
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div id="graph"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="retention-curve"></div>
+                        </div>
+                    </div>
+                    <div class="row info-area">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="alert alert-info" role="alert">
+                                <h5>Little numbers turn into big numbers</h5>
+                                <ul>
+                                    <li>The goal of this webpage is to help you grok how these product metrics behave when combined.</li>
+                                    <li>The right combination of <em>acquisition</em>, <em>retention</em> and <em>referral</em> metrics really matter for product growth. And if you haven't spent time thinking about these numbers it's not always intuitive which are most important, and how their effects compound.</li>
+                                    <li>Setting a target Retention Rate as your team or product KPI doesn't always feel like a big exciting goal, because the relative state change from X% to Y% is represented in small digits.</li>
+                                    <li>But as you will see if you play with the sliders, these percentages either create a growth ceiling, or unlock scale.</li>
+                                </ul>
+                            </div>
+                            <div class="alert alert-info" role="alert">
+                                <ul>
+                                    <li>If you're new to this, it's worth flagging that this is a simplified simulation. The rates you can manipulate with these sliders are things that can be measured and optimized for, but which also exist in a broader environment/market which can push these rates up and down without your input.</li>
+                                    <li>In the real world, this gets messy and much more volatile. But the basic math(s) is the same. If you get the right percentage of users to sign-up, stick around, and refer their friends you find a magical growth curve.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+            <footer>
+                <p><a href="http://adamlofting.com">adamlofting.com</a></p>
+            </footer>
+        </div>
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+        <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.0/d3.min.js' charset='utf-8'></script> -->
+        <script src='bower_components/d3/d3.min.js'></script>
+        <script src='bower_components/metrics-graphics/dist/metricsgraphics.min.js'></script>
+        <script src='bower_components/moment/min/moment.min.js'></script>
+        <script>
+
+            // data
+            var usersToday = 0;
+            var organicVisitorsPerDay = 10000;
+            var conversionRate = 0.075;
+
+            var retentionRate7Day = 0.05;
+            var retentionRate30Day = 0.002;
+            var retentionRate90Day = 0.001;
+            var referredVisitorsPer100NewUsers = 0;
+
+
+            function drawTheGraphs () {
+
+                var referralRate = referredVisitorsPer100NewUsers / 100;
+
+                // GRAPHING
+                var numberOfdaysToProject = 360;
+
+                var data = [];
+                var date = moment().startOf('day');
+                var entry;
+
+                for (var i = 0; i < numberOfdaysToProject; i++) {
+                    entry = {};
+                    entry.date = date.format('YYYY-MM-DD');
+                    entry.value = 0;
+                    data.push(entry);
+
+                    // increment date
+                    date.add(1, 'days');
+                }
+
+                var addFutureUsers = function (date, numberOfUsers) {
+                    numberOfUsers = Math.round(numberOfUsers);
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].date === date) {
+                            data[i].value = data[i].value + numberOfUsers;
+                        }
+                    }
+                };
+
+                // Use these 3 retention data points to join up the dots
+                var retentionRateByDay = [];
+                // Start at 100% retention
+                var retentionRateThisDay = 1;
+                var amountToDeclinePeriod;
+                var amountToDeclinePerDay;
+
+                for (var i = 1; i <= numberOfdaysToProject; i++) {
+                    if (i === 1) {
+                        // from day 1 to 7
+                        amountToDeclinePeriod = retentionRateThisDay - retentionRate7Day;
+                        amountToDeclinePerDay = amountToDeclinePeriod / 6;
+                    } else if (i === 7) {
+                        // from day 7 to 30
+                        retentionRateThisDay = retentionRate7Day;
+                        amountToDeclinePeriod = retentionRateThisDay - retentionRate30Day;
+                        amountToDeclinePerDay = amountToDeclinePeriod / 22;
+                    } else if (i === 30) {
+                        // from day 30 to 90
+                        retentionRateThisDay = retentionRate30Day;
+                        amountToDeclinePeriod = retentionRateThisDay - retentionRate90Day;
+                        amountToDeclinePerDay = amountToDeclinePeriod / 59;
+                    } else if (i === 90) {
+                        // from day 90 onwards
+                        retentionRateThisDay = retentionRate90Day;
+                        // retain rate of decay from 30 to 90 days
+                    }
+                    retentionRateByDay.push(retentionRateThisDay);
+
+                    if (retentionRateThisDay > 0) {
+                        retentionRateThisDay -= amountToDeclinePerDay;
+                    }
+
+                    if (retentionRateThisDay < 0) {
+                        retentionRateThisDay = 0;
+                    }
+                }
+
+                // create a version of this to graph
+                var retentionDataToGraph = [];
+                for (var i = 0; i < 120; i++) {
+                    retentionDataToGraph.push({
+                        date: moment().add(i, 'days').format('YYYY-MM-DD'),
+                        value: Math.round(1000 * retentionRateByDay[i])
+                    });
+                }
+
+                var visitorsPerDay = organicVisitorsPerDay;
+                var retainedUsers;
+                var newUsers;
+                var newReferrals;
+
+                // From this day forwards, what is the impact of this date
+                var projectFromThisDate = function (dateBeingProjectedFrom) {
+                    var dateBeingProjectedTo = moment(dateBeingProjectedFrom);
+
+                    for (var i = 0; i < numberOfdaysToProject; i++) {
+
+                        // calculate this for day 0 of this projection
+                        retainedUsers = visitorsPerDay * conversionRate;
+                        retainedUsers = retainedUsers * retentionRateByDay[i];
+
+                        addFutureUsers(dateBeingProjectedTo.format('YYYY-MM-DD'), retainedUsers);
+
+                        // increment dateBeingProjectedTo
+                        dateBeingProjectedTo.add(1, 'days');
+                    }
+
+                    // Factor in referrals on visitors the next day
+                    newUsers = Math.round(visitorsPerDay * conversionRate);
+                    newReferrals = Math.round(newUsers * referralRate);
+
+                    // bump this for the next day
+                    visitorsPerDay = visitorsPerDay + newReferrals;
+                };
+
+                // reset this
+                date = moment().startOf('day');
+
+                for (var i = 0; i < numberOfdaysToProject; i++) {
+                    projectFromThisDate(date);
+
+                    // increment date
+                    date.add(1, 'days');
+                }
+
+
+                // annotations
+                var projectionMarkers = [{
+                    'date': new Date(moment().add(90, 'days').format('YYYY-MM-DD')),
+                    'label': '90 days'
+                }, {
+                    'date': new Date(moment().add(180, 'days').format('YYYY-MM-DD')),
+                    'label': '180 days'
+                }, {
+                    'date': new Date(moment().add(270, 'days').format('YYYY-MM-DD')),
+                    'label': '270 days'
+                }];
+
+                // converts dates from string
+                data = MG.convert.date(data, 'date');
+
+                MG.data_graphic({
+                    title: "Retained Active Users Over Time",
+                    data: data,
+                    full_width: true,
+                    height: 350,
+                    right: 40,
+                    target: document.getElementById('graph'),
+                    x_accessor: 'date',
+                    y_accessor: 'value',
+                    markers: projectionMarkers
+                });
+
+                // annotations
+                var retentionMarkers = [{
+                    'date': new Date(moment().add(30, 'days').format('YYYY-MM-DD')),
+                    'label': '30 days'
+                }, {
+                    'date': new Date(moment().add(90, 'days').format('YYYY-MM-DD')),
+                    'label': '90 days'
+                }];
+                retentionDataToGraph = MG.convert.date(retentionDataToGraph, 'date');
+                MG.data_graphic({
+                    title: "Retention \"Curve\" p/1000 new users",
+                    data: retentionDataToGraph,
+                    full_width: true,
+                    height: 350,
+                    right: 40,
+                    target: document.getElementById('retention-curve'),
+                    x_accessor: 'date',
+                    y_accessor: 'value',
+                    markers: retentionMarkers,
+                    interpolate: 'basic'
+                });
+
+                $('#outputVisitors').text(organicVisitorsPerDay);
+                $('#rangeVisitors').val(organicVisitorsPerDay);
+
+                $('#outputConversionRate').text(conversionRate * 100 + "%");
+                $('#rangeConversion').val(conversionRate * 100);
+
+                $('#outputRetention7Days').text((retentionRate7Day * 100).toFixed(1) + "%");
+                $('#rangeRetention7Days').val(retentionRate7Day * 100);
+
+                $('#outputRetention30Days').text((retentionRate30Day * 100).toFixed(1) + "%");
+                $('#rangeRetention30Days').val(retentionRate30Day * 100);
+
+                $('#outputRetention90Days').text((retentionRate90Day * 100).toFixed(1) + "%");
+                $('#rangeRetention90Days').val(retentionRate90Day * 100);
+
+                $('#outputReferrals').text(referredVisitorsPer100NewUsers);
+                $('#rangeReferrals').val(referredVisitorsPer100NewUsers);
+            }
+
+            drawTheGraphs();
+
+            function preventSillyCurves () {
+                if (retentionRate90Day > retentionRate30Day) {
+                    retentionRate30Day = retentionRate90Day;
+                }
+
+                if (retentionRate30Day > retentionRate7Day) {
+                    retentionRate7Day = retentionRate30Day;
+                }
+            }
+
+            // INTERFACE
+            $(document).ready(function() {
+
+                $('#rangeVisitors').val(organicVisitorsPerDay);
+                $('#rangeVisitors').on('change', function () {
+                    var val = parseInt($(this).val());
+                    organicVisitorsPerDay = val;
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'visitors');
+                });
+
+                $('#rangeConversion').val(conversionRate * 100);
+                $('#rangeConversion').on('change', function () {
+                    conversionRate = $(this).val() / 100;
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'conveersion rate');
+                });
+
+                $('#rangeRetention7Days').val(retentionRate7Day * 100);
+                $('#rangeRetention7Days').on('change', function () {
+                    retentionRate7Day = $(this).val() / 100;
+                    preventSillyCurves();
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'retention rate 7 day');
+                });
+
+                $('#rangeRetention30Days').val(retentionRate30Day * 100);
+                $('#rangeRetention30Days').on('change', function () {
+                    retentionRate30Day = $(this).val() / 100;
+                    preventSillyCurves();
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'retention rate 30 day');
+                });
+
+                $('#rangeRetention90Days').val(retentionRate90Day * 100);
+                $('#rangeRetention90Days').on('change', function () {
+                    retentionRate90Day = $(this).val() / 100;
+                    preventSillyCurves();
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'retention rate 90 day');
+                });
+
+                $('#rangeReferrals').val(referredVisitorsPer100NewUsers);
+                $('#rangeReferrals').on('change', function () {
+                    referredVisitorsPer100NewUsers = $(this).val();
+                    drawTheGraphs();
+                    ga('send', 'event', 'slider', 'referred visitors');
+                });
+
+            });
+
+        </script>
+
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='https://www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-339485-6','auto');ga('send','pageview');
+        </script>
+    </body>
+</html>
