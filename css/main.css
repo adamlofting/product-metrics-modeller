@@ -285,3 +285,10 @@ footer {
 .info-area {
     margin-top: 40px;
 }
+
+.outputTotal em {
+    color: #AAA;
+    font-style: normal;
+}
+
+
