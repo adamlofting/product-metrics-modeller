@@ -336,6 +336,8 @@
                 data = MG.convert.date(data, 'date');
                 $('#labelDays').text(numberOfdaysToProject);
                 $('#totalDays').text(numberWithCommas(data[numberOfdaysToProject-1].value));
+                $('#totalDays').animate({ fontSize: "22px" }, 1000 )
+                                .animate({ fontSize: "18px" }, 1000 );
 
                 MG.data_graphic({
                     title: "Retained Active Users Over Time",
